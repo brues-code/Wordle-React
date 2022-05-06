@@ -7,11 +7,11 @@ function GetWordIndex(seed: Date, dateToRetrieve: Date) {
   return Math.round(t / 864e5);
 }
 
-function GetWordIndexForDate(e: Date) {
-  return GetWordIndex(SEED_DATE, e);
+function GetWordIndexForDate(dateToRetrieve: Date) {
+  return GetWordIndex(SEED_DATE, dateToRetrieve);
 }
 
-export function GetWordOfTheDay(e: Date) {
-  const wordIndex = GetWordIndexForDate(e);
+export function GetWordOfTheDay(dateToRetrieve: Date) {
+  const wordIndex = GetWordIndexForDate(dateToRetrieve);
   return words[wordIndex % words.length];
 }
