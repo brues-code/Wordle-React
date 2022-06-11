@@ -8,5 +8,7 @@ export const color = {
     $Blue: '#5454C4',
     $Blue_Lit: '#0000FF',
 
+    $DarkGrey1: '#3a3a3c',
+
     $Black1: '#121213',
 }
