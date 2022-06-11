@@ -1,28 +1,36 @@
-import React, { createContext, FC, useContext, useMemo } from "react";
-import { GetWordOfTheDay } from "app/utils/todays_word";
+import React, {
+    createContext,
+    FC,
+    useContext,
+    useMemo,
+    PropsWithChildren,
+} from 'react'
+import { GetWordOfTheDay } from 'app/utils/todays_word'
 
 interface State {
-  wordOfTheDay: string;
+    wordOfTheDay: string
 }
 
 const initialState: State = {
-  wordOfTheDay: ""
-};
+    wordOfTheDay: '',
+}
 
-export const AppContext = createContext(initialState);
+export const AppContext = createContext(initialState)
 
-const AppContextProvider: FC = ({ children }) => {
-  const wordOfTheDay = useMemo(() => GetWordOfTheDay(new Date()), []);
+const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
+    const wordOfTheDay = useMemo(() => GetWordOfTheDay(new Date()), [])
 
-  const contextState: State = {
-    wordOfTheDay
-  };
+    const contextState: State = {
+        wordOfTheDay,
+    }
 
-  return (
-    <AppContext.Provider value={contextState}>{children}</AppContext.Provider>
-  );
-};
+    return (
+        <AppContext.Provider value={contextState}>
+            {children}
+        </AppContext.Provider>
+    )
+}
 
-export const useApp = () => useContext(AppContext);
+export const useApp = () => useContext(AppContext)
 
-export default AppContextProvider;
+export default AppContextProvider

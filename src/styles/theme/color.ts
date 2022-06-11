@@ -6,5 +6,7 @@ export const color = {
     $Yellow: '#C2B206',
     $Yellow_Lit: '#FFFF00',
     $Blue: '#5454C4',
-    $Blue_Lit: '#0000FF'
-};
+    $Blue_Lit: '#0000FF',
+
+    $Black1: '#121213',
+}
