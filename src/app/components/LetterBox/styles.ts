@@ -6,8 +6,9 @@ export const LetterBorder = styled.div<{
     rowComplete: boolean
     index: number
 }>`
-    height: 62px;
-    width: 62px;
+    height: ${(props) => (props.rowComplete ? 62 : 58)}px;
+    width: ${(props) => (props.rowComplete ? 62 : 58)}px;
+
     color: ${(props) => props.theme.color.$White};
     display: inline-flex;
     align-items: center;
@@ -17,23 +18,16 @@ export const LetterBorder = styled.div<{
     vertical-align: middle;
     text-transform: uppercase;
     user-select: none;
-    animation-duration: 250ms;
-    animation-timing-function: ease-in;
+    transition: background-color 1000ms linear;
 
     @keyframes rollout {
-        0% {
+        from {
             transform: rotaxeX(0);
         }
-        100% {
+        50% {
             transform: rotateX(-90deg);
         }
-    }
-
-    @keyframes rollin {
-        0% {
-            transform: rotateX(-90deg);
-        }
-        100% {
+        to {
             transform: rotaxeX(0);
         }
     }
@@ -41,7 +35,6 @@ export const LetterBorder = styled.div<{
     ${({ rowComplete, index, hasChild, theme: { color }, verifyStatus }) =>
         rowComplete
             ? `animation: rollout ${0.4 + index * 0.3}s;
-            
             background-color: ${
                 verifyStatus === undefined
                     ? color.$DarkGrey2

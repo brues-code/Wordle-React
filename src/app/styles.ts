@@ -20,7 +20,7 @@ export const MiddleWrapper = styled.div`
 export const InnerContent = styled.div`
     margin-left: auto;
     margin-right: auto;
-    width: 350px;
+    width: 330px;
     height: 420px;
     text-align: center;
 `
