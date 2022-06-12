@@ -9,16 +9,16 @@ export const LetterBorder = styled.div<{
     height: ${(props) => (props.rowComplete ? 62 : 58)}px;
     width: ${(props) => (props.rowComplete ? 62 : 58)}px;
 
+    align-items: center;
     color: ${(props) => props.theme.color.$White};
     display: inline-flex;
-    align-items: center;
     font-size: 2rem;
     font-weight: bold;
     justify-content: center;
-    vertical-align: middle;
     text-transform: uppercase;
-    user-select: none;
     transition: background-color 1000ms linear;
+    user-select: none;
+    vertical-align: middle;
 
     @keyframes rollout {
         from {
