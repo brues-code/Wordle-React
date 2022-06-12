@@ -21,6 +21,6 @@ export const InnerContent = styled.div`
     margin-left: auto;
     margin-right: auto;
     width: 350px;
-    max-width: 100vw;
+    height: 420px;
     text-align: center;
 `

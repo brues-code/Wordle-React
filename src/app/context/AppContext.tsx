@@ -8,15 +8,14 @@ import React, {
     useEffect,
     useCallback,
 } from 'react'
-import { times } from 'lodash'
 
 import { Guesses } from 'types/guesses'
 
-import { GetWordOfTheDay } from 'utils/todays_word'
-import { WORD_SIZE } from '../app-constants'
+import { WORD_OF_THE_DAY } from 'utils/todays_word'
+import checkIsValidWord from 'utils/valid-word'
+import { WORD_SIZE } from 'app/app-constants'
 
 interface State {
-    wordOfTheDay: string
     guesses: Guesses
 }
 
@@ -27,7 +26,6 @@ interface ApiProps {
 type AppState = State & ApiProps
 
 const initialState: AppState = {
-    wordOfTheDay: '',
     guesses: [],
     setGuesses: () => null,
 }
@@ -35,32 +33,54 @@ const initialState: AppState = {
 export const AppContext = createContext(initialState)
 
 const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
-    const wordOfTheDay = useMemo(() => GetWordOfTheDay(new Date()), [])
     const [guesses, setGuesses] = useState<Guesses>([])
+
+    const solutionFound = useMemo(
+        () =>
+            guesses.length % WORD_SIZE === 0 &&
+            guesses.slice(-5).join('') === WORD_OF_THE_DAY,
+        [guesses]
+    )
+
+    const isValidWord = useMemo(() => {
+        if (guesses.length % WORD_SIZE === 0) {
+            return checkIsValidWord(guesses.slice(-WORD_SIZE).join(''))
+        }
+        return false
+    }, [guesses])
 
     const handleDelete = useCallback(
         () =>
-            setGuesses((prevState) => {
-                if (prevState.length % WORD_SIZE === 0) {
-                    return prevState
-                }
-                return prevState.slice(0, prevState.length - 1)
-            }),
-        []
+            !isValidWord &&
+            setGuesses((prevState) => prevState.slice(0, prevState.length - 1)),
+        [isValidWord]
     )
+
+    const handleAddGuess = useCallback(
+        (guess: string) => {
+            if (
+                !solutionFound &&
+                (guesses.length === 0 ||
+                    guesses.length % WORD_SIZE !== 0 ||
+                    isValidWord)
+            ) {
+                setGuesses((prevState) => prevState.concat(guess))
+            }
+        },
+        [guesses, isValidWord, solutionFound]
+    )
+
     const handleUserKeyPress = useCallback(
         (event: Event) => {
             const charCode = event['keyCode']
             if (charCode > 64 && charCode < 91) {
-                setGuesses((prevState) =>
-                    prevState.concat(String(event['key']).toUpperCase())
-                )
+                handleAddGuess(String(event['key'].toLowerCase()))
             }
             if (charCode === 8) {
                 handleDelete()
             }
         },
-        [handleDelete]
+        [handleDelete, handleAddGuess]
     )
     useEffect(() => {
         window.addEventListener('keydown', handleUserKeyPress)
@@ -70,11 +90,10 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const contextState: AppState = useMemo(
         () => ({
-            wordOfTheDay,
             guesses,
             setGuesses,
         }),
-        [wordOfTheDay, guesses, setGuesses]
+        [guesses, setGuesses]
     )
 
     return (
