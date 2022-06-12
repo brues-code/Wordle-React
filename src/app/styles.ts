@@ -9,6 +9,7 @@ export const OutsideWrapper = styled.div`
     width: 100%;
     background-color: ${(props) => props.theme.color.$Black1};
     background-size: cover;
+    font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
 `
 
 export const MiddleWrapper = styled.div`
@@ -19,7 +20,7 @@ export const MiddleWrapper = styled.div`
 export const InnerContent = styled.div`
     margin-left: auto;
     margin-right: auto;
-    width: 675px;
+    width: 350px;
     max-width: 100vw;
     text-align: center;
 `

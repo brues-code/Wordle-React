@@ -1,10 +1,19 @@
-import React from 'react'
-import { useApp } from 'app/context/AppContext'
+import React, { useMemo } from 'react'
+import { times } from 'lodash'
+
+import LetterRow from 'app/components/LetterRow'
+
+import { BoardContainer } from './styles'
+import { TOTAL_CHANCES } from 'app/app-constants'
 
 const WordleBoard: React.FC = () => {
-    const { wordOfTheDay } = useApp()
-
-    return <div>{wordOfTheDay}</div>
+    return (
+        <BoardContainer>
+            {times(TOTAL_CHANCES, (rowIndex) => (
+                <LetterRow key={rowIndex} rowIndex={rowIndex} />
+            ))}
+        </BoardContainer>
+    )
 }
 
 export default WordleBoard

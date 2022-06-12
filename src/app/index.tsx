@@ -3,7 +3,7 @@ import { ThemeProvider } from 'styled-components'
 
 import AppContextProvider from 'app/context/AppContext'
 
-import WordleBoard from 'app/components/WordleBoard'
+import WordleBoard from 'app/Wordle'
 
 import { color } from 'styles/theme'
 import { OutsideWrapper, MiddleWrapper, InnerContent } from './styles'
