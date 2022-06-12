@@ -23,9 +23,6 @@ const LetterBox: FC<OwnProps> = ({ guessLetter, rowIsComplete, index }) => {
         }
         return undefined
     }, [guessLetter, index, rowIsComplete])
-    if (rowIsComplete) {
-        console.log({ verifyStatus, rowIsComplete })
-    }
 
     return (
         <LetterBorder
