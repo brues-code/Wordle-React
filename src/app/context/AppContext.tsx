@@ -1,86 +1,108 @@
 import React, {
     createContext,
     FC,
-    useContext,
-    useMemo,
     PropsWithChildren,
-    useState,
-    useEffect,
     useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
 } from 'react'
-
-import { Guesses } from 'types/guesses'
+import { some } from 'lodash'
+import { useCookies } from 'react-cookie'
+import { Cookie } from 'universal-cookie'
+import { Cookies, KeyCode } from 'enums'
 
 import { WORD_OF_THE_DAY } from 'utils/todays_word'
 import checkIsValidWord from 'utils/valid-word'
 import { WORD_SIZE } from 'app/app-constants'
 
 interface State {
-    guesses: Guesses
+    guesses: string[]
+    currentGuess: string
 }
 
-interface ApiProps {
-    setGuesses: (guesses: Guesses) => void
-}
-
-type AppState = State & ApiProps
-
-const initialState: AppState = {
+const initialState: State = {
     guesses: [],
-    setGuesses: () => null,
+    currentGuess: '',
 }
 
 export const AppContext = createContext(initialState)
 
 const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
-    const [guesses, setGuesses] = useState<Guesses>([])
+    const [cookies, setCookie] = useCookies()
+    const [guesses, setGuesses] = useState<string[]>(
+        cookies[Cookies.GUESSES] || initialState.guesses
+    )
+    const [currentGuess, setCurrentGuess] = useState('')
+
+    const handleSetCookie = useCallback(
+        (cookie: Cookies, value: Cookie) => {
+            const midnight = new Date()
+            midnight.setHours(23, 59, 59, 0)
+            console.log(midnight)
+
+            setCookie(cookie, value, { expires: midnight })
+        },
+        [setCookie]
+    )
 
     const solutionFound = useMemo(
-        () =>
-            guesses.length % WORD_SIZE === 0 &&
-            guesses.slice(-5).join('') === WORD_OF_THE_DAY,
+        () => some(guesses, (guess) => guess === WORD_OF_THE_DAY),
         [guesses]
     )
 
-    const isValidWord = useMemo(() => {
-        if (guesses.length % WORD_SIZE === 0) {
-            return checkIsValidWord(guesses.slice(-WORD_SIZE).join(''))
-        }
-        return false
-    }, [guesses])
+    const currentGuessIsValidWord = useMemo(
+        () =>
+            currentGuess.length === WORD_SIZE && checkIsValidWord(currentGuess),
+        [currentGuess]
+    )
 
     const handleDelete = useCallback(
         () =>
-            !isValidWord &&
-            setGuesses((prevState) => prevState.slice(0, prevState.length - 1)),
-        [isValidWord]
+            setCurrentGuess((prevState) =>
+                prevState.slice(0, prevState.length - 1)
+            ),
+        []
     )
 
-    const handleAddGuess = useCallback(
-        (guess: string) => {
-            if (
-                !solutionFound &&
-                (guesses.length === 0 ||
-                    guesses.length % WORD_SIZE !== 0 ||
-                    isValidWord)
-            ) {
-                setGuesses((prevState) => prevState.concat(guess))
+    const handleAddLetter = useCallback(
+        (letter: string) => {
+            if (currentGuess.length < WORD_SIZE) {
+                setCurrentGuess((prevState) => prevState.concat(letter))
             }
         },
-        [guesses, isValidWord, solutionFound]
+        [currentGuess]
     )
+
+    const handleAddGuess = useCallback(() => {
+        if (currentGuessIsValidWord) {
+            setGuesses((prevState) => {
+                const newGuesses = prevState.concat(currentGuess)
+                handleSetCookie(Cookies.GUESSES, newGuesses)
+                return newGuesses
+            })
+            setCurrentGuess('')
+        }
+    }, [currentGuessIsValidWord, currentGuess, handleSetCookie])
 
     const handleUserKeyPress = useCallback(
         (event: Event) => {
-            const charCode = event['keyCode']
-            if (charCode > 64 && charCode < 91) {
-                handleAddGuess(String(event['key'].toLowerCase()))
+            if (solutionFound) {
+                return
             }
-            if (charCode === 8) {
+            const charCode = event['keyCode'] as KeyCode
+            if (charCode === KeyCode.Backspace) {
                 handleDelete()
             }
+            if (charCode == KeyCode.Enter) {
+                handleAddGuess()
+            }
+            if (charCode >= KeyCode.KeyA && charCode <= KeyCode.KeyZ) {
+                handleAddLetter(String(event['key'].toLowerCase()))
+            }
         },
-        [handleDelete, handleAddGuess]
+        [handleDelete, handleAddLetter, solutionFound, handleAddGuess]
     )
     useEffect(() => {
         window.addEventListener('keydown', handleUserKeyPress)
@@ -88,12 +110,12 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
         return () => window.removeEventListener('keydown', handleUserKeyPress)
     }, [handleUserKeyPress])
 
-    const contextState: AppState = useMemo(
+    const contextState: State = useMemo(
         () => ({
             guesses,
-            setGuesses,
+            currentGuess,
         }),
-        [guesses, setGuesses]
+        [guesses, currentGuess]
     )
 
     return (
