@@ -49,11 +49,12 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
         [guesses]
     )
 
-    const currentGuessIsValidWord = useMemo(
+    const currentGuessIsValidWord = useCallback(
         () =>
-            currentGuess.length === WORD_SIZE &&
-            !guesses.includes(currentGuess) &&
-            checkIsValidWord(currentGuess),
+            WORD_OF_THE_DAY === currentGuess ||
+            (currentGuess.length === WORD_SIZE &&
+                !guesses.includes(currentGuess) &&
+                checkIsValidWord(currentGuess)),
         [currentGuess, guesses]
     )
 
@@ -75,7 +76,7 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
     )
 
     const handleAddGuess = useCallback(() => {
-        if (currentGuessIsValidWord) {
+        if (currentGuessIsValidWord()) {
             setGuesses((prevState) => {
                 const newGuesses = prevState.concat(currentGuess)
                 handleSetCookie(Cookies.GUESSES, newGuesses)
