@@ -8,3 +8,9 @@ export enum KeyCode {
     KeyA = 65,
     KeyZ = 90,
 }
+
+export enum GuessType {
+    Invalid,
+    WrongIndex,
+    Correct
+}

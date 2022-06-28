@@ -1,21 +1,37 @@
 import React, { useMemo } from 'react'
 
 import { useApp } from 'app/context/AppContext'
-import { KeyCode } from 'enums'
+import { GuessType, KeyCode } from 'enums'
+
+import Icon from 'app/components/Icon'
 
 import { KeyContainer } from './styles'
 
 interface OwnProps {
     keyValue: string | KeyCode
-    validStatus?: boolean
+    validStatus?: GuessType
+}
+
+const specialKeyRender = (keyValue: KeyCode) => {
+    if (keyValue === KeyCode.Enter) {
+        return 'enter'
+    }
+    return <Icon name="icon_backspace" />
 }
 
 const KeyboardKey: React.FC<OwnProps> = ({ keyValue, validStatus }) => {
     const { guesses, currentGuess } = useApp()
 
-    const isSpecialKey = useMemo(() => typeof keyValue !== 'string', [keyValue])
+    const renderKeyValue = useMemo(() => {
+        if (typeof keyValue === 'string') {
+            return keyValue
+        }
+        return specialKeyRender(keyValue)
+    }, [keyValue])
 
-    return <KeyContainer validStatus={validStatus}>{keyValue}</KeyContainer>
+    return (
+        <KeyContainer validStatus={validStatus}>{renderKeyValue}</KeyContainer>
+    )
 }
 
 export default KeyboardKey

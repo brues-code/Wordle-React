@@ -1,8 +1,10 @@
 import styled from 'styled-components'
 
+import { GuessType } from 'enums'
+
 import getKeyColor from 'styles/utils/get-key-color'
 
-export const KeyContainer = styled.button<{ validStatus?: boolean }>`
+export const KeyContainer = styled.button<{ validStatus?: GuessType }>`
     align-items: center;
     background-color: ${({ validStatus }) => getKeyColor(validStatus)};
     border-radius: 4px;

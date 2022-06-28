@@ -2,30 +2,32 @@ import React, { useCallback, useMemo } from 'react'
 
 import { QWERTY_LAYOUT } from 'app/app-constants'
 import { validateKeys } from 'utils/word-validation'
+import { KeyCode } from 'enums'
 
 import { useApp } from 'app/context/AppContext'
 import KeyboardKey from './KeyboardKey'
 
-import { KeyboardContainer, KeyboardRow } from './styles'
-import { KeyCode } from '../../../enums'
+import { KeyboardContainer, KeyboardRow, KeyBoardSpacer } from './styles'
 
 const Keyboard: React.FC = () => {
     const { guesses } = useApp()
 
     const validatedKeys = useMemo(() => validateKeys(guesses), [guesses])
 
-    const renderRow = useCallback(
-        (row: string) =>
-            row.split('').map((key) => {
-                return (
-                    <KeyboardKey
-                        key={key}
-                        keyValue={key}
-                        validStatus={validatedKeys[key]}
-                    />
-                )
-            }),
+    const renderKey = useCallback(
+        (key: string | KeyCode) => (
+            <KeyboardKey
+                key={key}
+                keyValue={key}
+                validStatus={validatedKeys[key]}
+            />
+        ),
         [validatedKeys]
+    )
+
+    const renderRow = useCallback(
+        (row: string) => row.split('').map(renderKey),
+        [renderKey]
     )
 
     const renderTopRow = useMemo(
@@ -34,7 +36,13 @@ const Keyboard: React.FC = () => {
     )
 
     const renderMiddleRow = useMemo(
-        () => <KeyboardRow>{renderRow(QWERTY_LAYOUT[1])}</KeyboardRow>,
+        () => (
+            <KeyboardRow>
+                <KeyBoardSpacer />
+                {renderRow(QWERTY_LAYOUT[1])}
+                <KeyBoardSpacer />
+            </KeyboardRow>
+        ),
         [renderRow]
     )
 

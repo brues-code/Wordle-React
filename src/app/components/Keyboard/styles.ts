@@ -12,3 +12,7 @@ export const KeyboardRow = styled.div`
     touch-action: manipulation;
     width: 100%;
 `
+
+export const KeyBoardSpacer = styled.div`
+    flex: 0.5;
+`

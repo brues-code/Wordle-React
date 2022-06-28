@@ -19,11 +19,15 @@ import checkIsValidWord from 'utils/valid-word'
 import getMidnightStamp from 'utils/get-midnight-stamp'
 
 interface State {
+    solutionFound: boolean
     guesses: string[]
     currentGuess: string
 }
 
-const initialState: State = {
+type AppState = State
+
+const initialState: AppState = {
+    solutionFound: false,
     guesses: [],
     currentGuess: '',
 }
@@ -110,12 +114,13 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
         return () => window.removeEventListener('keydown', handleUserKeyPress)
     }, [handleUserKeyPress, solutionFound])
 
-    const contextState: State = useMemo(
+    const contextState: AppState = useMemo(
         () => ({
             guesses,
             currentGuess,
+            solutionFound,
         }),
-        [guesses, currentGuess]
+        [guesses, currentGuess, solutionFound]
     )
 
     return (

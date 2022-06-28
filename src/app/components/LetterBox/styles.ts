@@ -1,10 +1,12 @@
 import styled from 'styled-components'
 
+import { GuessType } from 'enums'
+
 import getKeyColor from 'styles/utils/get-key-color'
 
 export const LetterBorder = styled.div<{
     hasChild: boolean
-    verifyStatus: boolean | undefined
+    verifyStatus: GuessType | undefined
     rowComplete?: boolean
     index: number
 }>`
