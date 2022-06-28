@@ -1,6 +1,7 @@
 import React, {
     createContext,
     FC,
+    Key,
     PropsWithChildren,
     useCallback,
     useContext,
@@ -24,12 +25,17 @@ interface State {
     currentGuess: string
 }
 
-type AppState = State
+interface ApiProps {
+    handleKeyCode: (keyCode: KeyCode) => void
+}
+
+type AppState = State & ApiProps
 
 const initialState: AppState = {
     solutionFound: false,
     guesses: [],
     currentGuess: '',
+    handleKeyCode: () => null,
 }
 
 export const AppContext = createContext(initialState)
@@ -90,22 +96,31 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
         }
     }, [currentGuessIsValidWord, currentGuess, handleSetCookie])
 
+    const handleKeyCode = useCallback(
+        (charCode: KeyCode) => {
+            if (solutionFound) {
+                return
+            }
+            if (charCode === KeyCode.Backspace) {
+                handleDelete()
+            } else if (charCode == KeyCode.Enter) {
+                handleAddGuess()
+            } else if (charCode >= KeyCode.KeyA && charCode <= KeyCode.KeyZ) {
+                handleAddLetter(String.fromCharCode(charCode).toLowerCase())
+            }
+        },
+        [solutionFound, handleAddGuess, handleDelete, handleAddLetter]
+    )
+
     const handleUserKeyPress = useCallback(
         (event: Event) => {
             if (solutionFound) {
                 window.removeEventListener('keydown', handleUserKeyPress)
                 return
             }
-            const charCode = event['keyCode'] as KeyCode
-            if (charCode === KeyCode.Backspace) {
-                handleDelete()
-            } else if (charCode == KeyCode.Enter) {
-                handleAddGuess()
-            } else if (charCode >= KeyCode.KeyA && charCode <= KeyCode.KeyZ) {
-                handleAddLetter(String(event['key'].toLowerCase()))
-            }
+            handleKeyCode(event['keyCode'] as KeyCode)
         },
-        [handleDelete, handleAddLetter, solutionFound, handleAddGuess]
+        [handleKeyCode, solutionFound]
     )
     useEffect(() => {
         if (!solutionFound) {
@@ -119,8 +134,9 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
             guesses,
             currentGuess,
             solutionFound,
+            handleKeyCode,
         }),
-        [guesses, currentGuess, solutionFound]
+        [guesses, currentGuess, solutionFound, handleKeyCode]
     )
 
     return (

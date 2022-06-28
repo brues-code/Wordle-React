@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import { useApp } from 'app/context/AppContext'
 import { GuessType, KeyCode } from 'enums'
@@ -20,7 +20,7 @@ const specialKeyRender = (keyValue: KeyCode) => {
 }
 
 const KeyboardKey: React.FC<OwnProps> = ({ keyValue, validStatus }) => {
-    const { guesses, currentGuess } = useApp()
+    const { guesses, currentGuess, handleKeyCode } = useApp()
 
     const renderKeyValue = useMemo(() => {
         if (typeof keyValue === 'string') {
@@ -29,8 +29,18 @@ const KeyboardKey: React.FC<OwnProps> = ({ keyValue, validStatus }) => {
         return specialKeyRender(keyValue)
     }, [keyValue])
 
+    const handleKeyClick = useCallback(() => {
+        handleKeyCode(
+            typeof keyValue === 'string'
+                ? keyValue.charCodeAt(0) - 32
+                : keyValue
+        )
+    }, [handleKeyCode, keyValue])
+
     return (
-        <KeyContainer validStatus={validStatus}>{renderKeyValue}</KeyContainer>
+        <KeyContainer onClick={handleKeyClick} validStatus={validStatus}>
+            {renderKeyValue}
+        </KeyContainer>
     )
 }
 
