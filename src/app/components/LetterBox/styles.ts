@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import getKeyColor from 'styles/utils/get-key-color'
+
 export const LetterBorder = styled.div<{
     hasChild: boolean
     verifyStatus: boolean | undefined
@@ -35,13 +37,7 @@ export const LetterBorder = styled.div<{
     ${({ rowComplete, index, hasChild, theme: { color }, verifyStatus }) =>
         rowComplete
             ? `animation: rollout ${0.4 + index * 0.3}s;
-            background-color: ${
-                verifyStatus === undefined
-                    ? color.$DarkGrey2
-                    : verifyStatus
-                    ? color.$DarkGreen1
-                    : color.$DarkYellow1
-            };`
+            background-color: ${getKeyColor(verifyStatus)};`
             : `border: 2px solid ${
                   hasChild ? color.$DarkGrey1 : color.$DarkGrey2
               };`}
