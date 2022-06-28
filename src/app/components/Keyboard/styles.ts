@@ -7,5 +7,8 @@ export const KeyboardContainer = styled.div`
 `
 
 export const KeyboardRow = styled.div`
+    display: flex;
+    margin: 0 auto 8px;
+    touch-action: manipulation;
     width: 100%;
 `
