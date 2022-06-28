@@ -20,7 +20,7 @@ const specialKeyRender = (keyValue: KeyCode) => {
 }
 
 const KeyboardKey: React.FC<OwnProps> = ({ keyValue, validStatus }) => {
-    const { guesses, currentGuess, handleKeyCode } = useApp()
+    const { handleKeyCode } = useApp()
 
     const renderKeyValue = useMemo(() => {
         if (typeof keyValue === 'string') {
