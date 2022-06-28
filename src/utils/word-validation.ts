@@ -12,7 +12,7 @@ export function validateLetter(guessLetter: string, index: number) {
 }
 
 export function validateKeys(guesses: string[]) {
-    const keyInfo: { [key: string]: GuessType | undefined } = {}
+    const keyInfo: { [key: string]: GuessType } = {}
 
     guesses.forEach((guess) => {
         guess.split('').forEach((l, index) => {
