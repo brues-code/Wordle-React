@@ -13,9 +13,10 @@ import { useCookies } from 'react-cookie'
 import { Cookie } from 'universal-cookie'
 import { Cookies, KeyCode } from 'enums'
 
+import { WORD_SIZE } from 'app/app-constants'
 import { WORD_OF_THE_DAY } from 'utils/todays_word'
 import checkIsValidWord from 'utils/valid-word'
-import { WORD_SIZE } from 'app/app-constants'
+import getMidnightStamp from 'utils/get-midnight-stamp'
 
 interface State {
     guesses: string[]
@@ -38,11 +39,7 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const handleSetCookie = useCallback(
         (cookie: Cookies, value: Cookie) => {
-            const midnight = new Date()
-            midnight.setHours(23, 59, 59, 0)
-            console.log(midnight)
-
-            setCookie(cookie, value, { expires: midnight })
+            setCookie(cookie, value, { expires: getMidnightStamp() })
         },
         [setCookie]
     )
@@ -54,8 +51,10 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const currentGuessIsValidWord = useMemo(
         () =>
-            currentGuess.length === WORD_SIZE && checkIsValidWord(currentGuess),
-        [currentGuess]
+            currentGuess.length === WORD_SIZE &&
+            !guesses.includes(currentGuess) &&
+            checkIsValidWord(currentGuess),
+        [currentGuess, guesses]
     )
 
     const handleDelete = useCallback(
