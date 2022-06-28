@@ -7,7 +7,7 @@ import { WORD_OF_THE_DAY } from 'utils/todays_word'
 type OwnProps = {
     index: number
     guessLetter?: string
-    rowIsComplete: boolean
+    rowIsComplete?: boolean
 }
 
 const LetterBox: FC<OwnProps> = ({ guessLetter, rowIsComplete, index }) => {

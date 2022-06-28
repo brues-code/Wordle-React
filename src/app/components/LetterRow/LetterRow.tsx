@@ -1,44 +1,56 @@
 import React, { useMemo } from 'react'
 import { times } from 'lodash'
 
-import { useApp } from 'app/context/AppContext'
 import LetterBox from 'app/components/LetterBox'
 
 import { RowGrid } from './styles'
 import { WORD_SIZE } from 'app/app-constants'
 import isValidWord from 'utils/valid-word'
 
-type OwnProps = { rowIndex: number }
+interface OwnProps {
+    guess: string
+    complete?: boolean
+}
 
-const LetterRow: React.FC<OwnProps> = ({ rowIndex }) => {
-    const { guesses } = useApp()
+const LetterRow: React.FC<OwnProps> = ({ guess, complete }) => {
+    const rowIsComplete = useMemo(
+        () => guess.length === WORD_SIZE && complete && isValidWord(guess),
+        [guess, complete]
+    )
 
-    const rowOffset = useMemo(() => rowIndex * WORD_SIZE, [rowIndex])
-
-    const rowIsComplete = useMemo(() => {
-        const rowLetters = guesses.slice(rowOffset, rowOffset + 5)
-        return (
-            rowLetters.length === WORD_SIZE && isValidWord(rowLetters.join(''))
-        )
-    }, [guesses, rowOffset])
-
-    const renderGuesses = useMemo(
+    const renderExistingLetters = useMemo(
         () =>
-            times(WORD_SIZE, (index) => {
-                const guessIndex = rowOffset + index
-                return (
+            guess
+                .split('')
+                .map((letter, index) => (
                     <LetterBox
                         key={index}
                         index={index}
                         rowIsComplete={rowIsComplete}
-                        guessLetter={guesses[guessIndex]}
+                        guessLetter={letter}
                     />
-                )
-            }),
-        [guesses, rowIsComplete, rowOffset]
+                )),
+        [guess, rowIsComplete]
     )
 
-    return <RowGrid>{renderGuesses}</RowGrid>
+    const renderEmptyLetters = useMemo(
+        () =>
+            times(Math.max(0, WORD_SIZE - guess.length), (index) => (
+                <LetterBox
+                    key={index}
+                    index={index}
+                    rowIsComplete={rowIsComplete}
+                />
+            )),
+        [guess.length, rowIsComplete]
+    )
+
+    return (
+        <RowGrid>
+            {renderExistingLetters}
+            {renderEmptyLetters}
+        </RowGrid>
+    )
 }
 
 export default LetterRow

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export const LetterBorder = styled.div<{
     hasChild: boolean
     verifyStatus: boolean | undefined
-    rowComplete: boolean
+    rowComplete?: boolean
     index: number
 }>`
     height: ${(props) => (props.rowComplete ? 62 : 58)}px;
