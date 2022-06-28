@@ -2,7 +2,7 @@ import React, { FC, useMemo } from 'react'
 
 import { LetterBorder } from './styles'
 
-import { WORD_OF_THE_DAY } from 'utils/todays_word'
+import { validateLetter } from 'utils/word-validation'
 
 type OwnProps = {
     index: number
@@ -15,13 +15,7 @@ const LetterBox: FC<OwnProps> = ({ guessLetter, rowIsComplete, index }) => {
         if (!rowIsComplete || !guessLetter) {
             return undefined
         }
-        if (WORD_OF_THE_DAY[index] === guessLetter) {
-            return true
-        }
-        if (WORD_OF_THE_DAY.includes(guessLetter)) {
-            return false
-        }
-        return undefined
+        return validateLetter(guessLetter, index)
     }, [guessLetter, index, rowIsComplete])
 
     return (
