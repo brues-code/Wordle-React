@@ -7,14 +7,15 @@ import { KeyContainer } from './styles'
 
 interface OwnProps {
     keyValue: string | KeyCode
+    validStatus?: boolean
 }
 
-const KeyboardKey: React.FC<OwnProps> = ({ keyValue }) => {
+const KeyboardKey: React.FC<OwnProps> = ({ keyValue, validStatus }) => {
     const { guesses, currentGuess } = useApp()
 
     const isSpecialKey = useMemo(() => typeof keyValue !== 'string', [keyValue])
 
-    return <KeyContainer>{keyValue}</KeyContainer>
+    return <KeyContainer validStatus={validStatus}>{keyValue}</KeyContainer>
 }
 
 export default KeyboardKey

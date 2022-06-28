@@ -1,8 +1,10 @@
 import styled from 'styled-components'
 
-export const KeyContainer = styled.button`
+import getKeyColor from 'styles/utils/get-key-color'
+
+export const KeyContainer = styled.button<{ validStatus?: boolean }>`
     align-items: center;
-    background-color: ${(props) => props.theme.color.$LightGrey1};
+    background-color: ${({ validStatus }) => getKeyColor(validStatus)};
     border-radius: 4px;
     border: 0;
     color: ${(props) => props.theme.color.$White};
