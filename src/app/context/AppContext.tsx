@@ -89,26 +89,26 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const handleUserKeyPress = useCallback(
         (event: Event) => {
             if (solutionFound) {
+                window.removeEventListener('keydown', handleUserKeyPress)
                 return
             }
             const charCode = event['keyCode'] as KeyCode
             if (charCode === KeyCode.Backspace) {
                 handleDelete()
-            }
-            if (charCode == KeyCode.Enter) {
+            } else if (charCode == KeyCode.Enter) {
                 handleAddGuess()
-            }
-            if (charCode >= KeyCode.KeyA && charCode <= KeyCode.KeyZ) {
+            } else if (charCode >= KeyCode.KeyA && charCode <= KeyCode.KeyZ) {
                 handleAddLetter(String(event['key'].toLowerCase()))
             }
         },
         [handleDelete, handleAddLetter, solutionFound, handleAddGuess]
     )
     useEffect(() => {
-        window.addEventListener('keydown', handleUserKeyPress)
-
+        if (!solutionFound) {
+            window.addEventListener('keydown', handleUserKeyPress)
+        }
         return () => window.removeEventListener('keydown', handleUserKeyPress)
-    }, [handleUserKeyPress])
+    }, [handleUserKeyPress, solutionFound])
 
     const contextState: State = useMemo(
         () => ({
