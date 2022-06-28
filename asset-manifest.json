@@ -1,10 +1,11 @@
 {
   "files": {
-    "main.js": "/wordle-react/static/js/main.d8ff7ea5.js",
+    "main.js": "/wordle-react/static/js/main.76f4d747.js",
     "static/js/27.272e768c.chunk.js": "/wordle-react/static/js/27.272e768c.chunk.js",
+    "static/media/icons.svg": "/wordle-react/static/media/icons.be602219b96d055ea3ec592cc38b900c.svg",
     "index.html": "/wordle-react/index.html"
   },
   "entrypoints": [
-    "static/js/main.d8ff7ea5.js"
+    "static/js/main.76f4d747.js"
   ]
 }

@@ -5,6 +5,8 @@
  * MIT Licensed
  */
 
+/*! svg4everybody v2.1.9 | github.com/jonathantneal/svg4everybody */
+
 /**
  * @license
  * Lodash <https://lodash.com/>
