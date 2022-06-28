@@ -49,12 +49,12 @@ const Keyboard: React.FC = () => {
     const renderBottomRow = useMemo(
         () => (
             <KeyboardRow>
-                <KeyboardKey keyValue={KeyCode.Enter} />
+                {renderKey(KeyCode.Enter)}
                 {renderRow(QWERTY_LAYOUT[2])}
-                <KeyboardKey keyValue={KeyCode.Backspace} />
+                {renderKey(KeyCode.Backspace)}
             </KeyboardRow>
         ),
-        [renderRow]
+        [renderRow, renderKey]
     )
 
     return (
