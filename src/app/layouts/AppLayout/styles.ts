@@ -1,15 +1,15 @@
 import styled from 'styled-components'
 
 export const OutsideWrapper = styled.div`
-    display: table;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
     background-color: ${(props) => props.theme.color.$Black1};
     background-size: cover;
+    display: table;
     font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
 `
 
 export const MiddleWrapper = styled.div`
@@ -18,9 +18,12 @@ export const MiddleWrapper = styled.div`
 `
 
 export const InnerContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     margin-left: auto;
     margin-right: auto;
-    width: 330px;
-    height: 420px;
+    max-width: 500px;
     text-align: center;
+    width: 100%;
 `

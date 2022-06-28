@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react'
 import { times } from 'lodash'
 
+import { TOTAL_CHANCES } from 'app/app-constants'
+
 import { useApp } from 'app/context/AppContext'
 import LetterRow from 'app/components/LetterRow'
 
-import { BoardContainer } from './styles'
-import { TOTAL_CHANCES } from 'app/app-constants'
+import { BoardContainer, BoardWrapper } from './styles'
 
 const WordleBoard: React.FC = () => {
     const { guesses, currentGuess } = useApp()
@@ -35,11 +36,13 @@ const WordleBoard: React.FC = () => {
     )
 
     return (
-        <BoardContainer>
-            {renderExistingGuesses}
-            {renderCurrentGuess}
-            {renderEmptyGuesses}
-        </BoardContainer>
+        <BoardWrapper>
+            <BoardContainer>
+                {renderExistingGuesses}
+                {renderCurrentGuess}
+                {renderEmptyGuesses}
+            </BoardContainer>
+        </BoardWrapper>
     )
 }
 
