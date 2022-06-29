@@ -11,22 +11,18 @@ export function validateLetter(guessLetter: string, index: number) {
     return GuessType.Invalid
 }
 
-export function validateKeys(
-    guesses: string[],
-    keyInfo: { [key: string]: GuessType } = {}
-) {
-    console.log(keyInfo)
-    guesses.forEach((guess) =>
-        guess.split('').forEach((l, index) => {
-            if (keyInfo[l] !== GuessType.Correct) {
-                const validStatus = validateLetter(l, index)
-                // console.log(validStatus, l)
-                if (!keyInfo[l] || validStatus > keyInfo[l]) {
-                    keyInfo[l] = validStatus
+export function validateKeys(guesses: string[]) {
+    const keyInfo: { [key: string]: GuessType } = {}
+    guesses.forEach((guess) => {
+        for (let i = 0; i < guess.length; i++) {
+            const letter = guess[i]
+            if (keyInfo[letter] !== GuessType.Correct) {
+                const validStatus = validateLetter(letter, i)
+                if (!keyInfo[letter] || validStatus > keyInfo[letter]) {
+                    keyInfo[letter] = validStatus
                 }
             }
-        })
-    )
-
+        }
+    })
     return keyInfo
 }
