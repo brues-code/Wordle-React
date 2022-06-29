@@ -16,25 +16,20 @@ const MidnightCountdown = () => {
     )
 
     const renderer: CountdownRendererFn = useCallback(
-        ({ hours, minutes, seconds, completed }) => {
-            if (completed) {
-                return (
-                    <span>{formatMessage({ id: 'countdown.complete' })}</span>
-                )
-            }
-            return (
-                <span>
-                    {formatMessage(
-                        { id: 'countdown.remainingTime' },
-                        {
-                            hours: formatTime(hours),
-                            minutes: formatTime(minutes),
-                            seconds: formatTime(seconds),
-                        }
-                    )}
-                </span>
-            )
-        },
+        ({ hours, minutes, seconds, completed }) => (
+            <span>
+                {completed
+                    ? formatMessage({ id: 'countdown.complete' })
+                    : formatMessage(
+                          { id: 'countdown.remainingTime' },
+                          {
+                              hours: formatTime(hours),
+                              minutes: formatTime(minutes),
+                              seconds: formatTime(seconds),
+                          }
+                      )}
+            </span>
+        ),
         [formatTime, formatMessage]
     )
 
