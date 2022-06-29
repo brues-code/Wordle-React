@@ -1,4 +1,4 @@
-import { KeyCode } from 'enums'
+import { KeyCode, Locales } from 'enums'
 
 export const SEED_DATE = new Date(2022, 4, 6, 0, 0, 0, 0)
 
@@ -10,3 +10,5 @@ export const QWERTY_LAYOUT = [
     [null, 'asdfghjkl', null],
     [KeyCode.Enter, 'zxcvbnm', KeyCode.Backspace],
 ]
+
+export const DEFAULT_LOCALE = Locales.en

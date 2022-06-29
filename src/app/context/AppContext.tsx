@@ -11,9 +11,9 @@ import React, {
 import { some } from 'lodash'
 import { useCookies } from 'react-cookie'
 import { Cookie } from 'universal-cookie'
-import { Cookies, KeyCode } from 'enums'
+import { Cookies, KeyCode, Locales } from 'enums'
 
-import { WORD_SIZE } from 'app/app-constants'
+import { WORD_SIZE, DEFAULT_LOCALE } from 'app/app-constants'
 import { WORD_OF_THE_DAY } from 'utils/todays_word'
 import checkIsValidWord from 'utils/valid-word'
 import getMidnightStamp from 'utils/get-midnight-stamp'
@@ -22,6 +22,7 @@ interface State {
     solutionFound: boolean
     guesses: string[]
     currentGuess: string
+    currentLocale: Locales
 }
 
 interface ApiProps {
@@ -35,6 +36,7 @@ const initialState: AppState = {
     guesses: [],
     currentGuess: '',
     handleKeyCode: () => null,
+    currentLocale: DEFAULT_LOCALE,
 }
 
 export const AppContext = createContext(initialState)
@@ -43,6 +45,9 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const [cookies, setCookie] = useCookies()
     const [guesses, setGuesses] = useState<string[]>(
         cookies[Cookies.GUESSES] || initialState.guesses
+    )
+    const [currentLocale] = useState(
+        cookies[Cookies.LOCALE] || initialState.currentLocale
     )
     const [currentGuess, setCurrentGuess] = useState('')
 
@@ -130,12 +135,13 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const contextState: AppState = useMemo(
         () => ({
-            guesses,
             currentGuess,
-            solutionFound,
+            currentLocale,
+            guesses,
             handleKeyCode,
+            solutionFound,
         }),
-        [guesses, currentGuess, solutionFound, handleKeyCode]
+        [guesses, currentGuess, solutionFound, handleKeyCode, currentLocale]
     )
 
     return (
