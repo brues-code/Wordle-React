@@ -5,8 +5,13 @@ import getMidnightStamp from 'utils/get-midnight-stamp'
 
 import { CountdownContainer } from './styles'
 
-const MidnightCountdown: React.FC = () => {
+const MidnightCountdown = () => {
     const midnightStamp = useMemo(getMidnightStamp, [])
+
+    const formatTime = useCallback(
+        (time: number) => (time > 9 ? time : `0${time}`),
+        []
+    )
 
     const renderer: CountdownRendererFn = useCallback(
         ({ hours, minutes, seconds, completed }) => {
@@ -15,11 +20,12 @@ const MidnightCountdown: React.FC = () => {
             }
             return (
                 <span>
-                    New game in {hours}:{minutes}:{seconds}
+                    New game in {formatTime(hours)}:{formatTime(minutes)}:
+                    {formatTime(seconds)}
                 </span>
             )
         },
-        []
+        [formatTime]
     )
 
     return (
