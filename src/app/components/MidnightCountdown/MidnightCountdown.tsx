@@ -1,11 +1,13 @@
 import React, { useCallback, useMemo } from 'react'
 import Countdown, { CountdownRendererFn } from 'react-countdown'
+import { useIntl } from 'react-intl'
 
 import getMidnightStamp from 'utils/get-midnight-stamp'
 
 import { CountdownContainer } from './styles'
 
 const MidnightCountdown = () => {
+    const { formatMessage } = useIntl()
     const midnightStamp = useMemo(getMidnightStamp, [])
 
     const formatTime = useCallback(
@@ -16,16 +18,24 @@ const MidnightCountdown = () => {
     const renderer: CountdownRendererFn = useCallback(
         ({ hours, minutes, seconds, completed }) => {
             if (completed) {
-                return <span>Refresh the page to load a new game!</span>
+                return (
+                    <span>{formatMessage({ id: 'countdown.complete' })}</span>
+                )
             }
             return (
                 <span>
-                    New game in {formatTime(hours)}:{formatTime(minutes)}:
-                    {formatTime(seconds)}
+                    {formatMessage(
+                        { id: 'countdown.remainingTime' },
+                        {
+                            hours: formatTime(hours),
+                            minutes: formatTime(minutes),
+                            seconds: formatTime(seconds),
+                        }
+                    )}
                 </span>
             )
         },
-        [formatTime]
+        [formatTime, formatMessage]
     )
 
     return (
