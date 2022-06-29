@@ -25,7 +25,7 @@ const Keyboard: FC = () => {
         [validatedKeys]
     )
 
-    const renderRow = useCallback(
+    const renderLetters = useCallback(
         (row: string) => row.split('').map(renderKey),
         [renderKey]
     )
@@ -35,19 +35,19 @@ const Keyboard: FC = () => {
             QWERTY_LAYOUT.map((row, index) => (
                 <KeyboardRow key={index}>
                     {typeof row === 'string'
-                        ? renderRow(row)
+                        ? renderLetters(row)
                         : row.map((keys, index) => {
                               if (!keys) {
                                   return <KeyBoardSpacer key={index} />
                               } else if (typeof keys === 'string') {
-                                  return renderRow(keys)
+                                  return renderLetters(keys)
                               } else {
                                   return renderKey(keys)
                               }
                           })}
                 </KeyboardRow>
             )),
-        [renderKey, renderRow]
+        [renderKey, renderLetters]
     )
 
     return <KeyboardContainer>{renderRows}</KeyboardContainer>
