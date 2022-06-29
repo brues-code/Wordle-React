@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, FC } from 'react'
 
 import { useApp } from 'app/context/AppContext'
 import { GuessType, KeyCode } from 'enums'
@@ -19,7 +19,7 @@ const specialKeyRender = (keyValue: KeyCode) => {
     return <Icon name="icon_backspace" />
 }
 
-const KeyboardKey: React.FC<OwnProps> = ({ keyValue, validStatus }) => {
+const KeyboardKey: FC<OwnProps> = ({ keyValue, validStatus }) => {
     const { handleKeyCode } = useApp()
 
     const renderKeyValue = useMemo(() => {
