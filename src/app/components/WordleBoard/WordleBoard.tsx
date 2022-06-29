@@ -5,11 +5,12 @@ import { TOTAL_CHANCES } from 'app/app-constants'
 
 import { useApp } from 'app/context/AppContext'
 import LetterRow from 'app/components/LetterRow'
+import MidnightCountdown from 'app/components/MidnightCountdown'
 
-import { BoardContainer, BoardWrapper } from './styles'
+import { BoardContainer, BoardContent, BoardWrapper } from './styles'
 
 const WordleBoard: React.FC = () => {
-    const { guesses, currentGuess } = useApp()
+    const { guesses, currentGuess, solutionFound } = useApp()
 
     const renderExistingGuesses = useMemo(
         () =>
@@ -35,13 +36,21 @@ const WordleBoard: React.FC = () => {
         [guesses.length]
     )
 
+    const renderMidnightCountdown = useMemo(
+        () => solutionFound && <MidnightCountdown />,
+        [solutionFound]
+    )
+
     return (
         <BoardWrapper>
-            <BoardContainer>
-                {renderExistingGuesses}
-                {renderCurrentGuess}
-                {renderEmptyGuesses}
-            </BoardContainer>
+            <BoardContent>
+                {renderMidnightCountdown}
+                <BoardContainer>
+                    {renderExistingGuesses}
+                    {renderCurrentGuess}
+                    {renderEmptyGuesses}
+                </BoardContainer>
+            </BoardContent>
         </BoardWrapper>
     )
 }

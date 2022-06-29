@@ -6,6 +6,12 @@ export const BoardContainer = styled.div`
     grid-gap: 5px;
 `
 
+export const BoardContent = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+`
+
 export const BoardWrapper = styled.div`
     display: flex;
     justify-content: center;
