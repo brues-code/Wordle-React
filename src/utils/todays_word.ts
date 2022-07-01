@@ -1,19 +1,15 @@
 import { SEED_DATE } from 'app/app-constants'
 import words from './words.json'
 
-function GetWordIndex(seed: Date, dateToRetrieve: Date) {
-    const s = new Date(seed),
-        t =
-            new Date(dateToRetrieve).setHours(0, 0, 0, 0) -
-            s.setHours(0, 0, 0, 0)
-    return Math.round(t / 864e5)
-}
+const GetWordIndex = (seed: Date, dateToRetrieve: Date) =>
+    Math.round(
+        (new Date(dateToRetrieve).setHours(0, 0, 0, 0) -
+            new Date(seed).setHours(0, 0, 0, 0)) /
+            (1000 * 60 * 60 * 24)
+    )
 
-export function GetWordIndexForDate(dateToRetrieve: Date) {
-    return GetWordIndex(SEED_DATE, dateToRetrieve)
-}
+const GetWordIndexForDate = (dateToRetrieve: Date) =>
+    GetWordIndex(SEED_DATE, dateToRetrieve)
 
-export function GetWordOfTheDay(dateToRetrieve: Date) {
-    const wordIndex = GetWordIndexForDate(dateToRetrieve)
-    return words[wordIndex % words.length]
-}
+export const GetWordOfTheDay = (dateToRetrieve: Date) =>
+    words[GetWordIndexForDate(dateToRetrieve) % words.length]
