@@ -99,9 +99,6 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const handleKeyCode = useCallback(
         (key: string) => {
-            if (gameFinished) {
-                return
-            }
             if (key === KeyCode.Backspace) {
                 handleDelete()
             } else if (key == KeyCode.Enter) {
@@ -110,7 +107,7 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
                 handleAddLetter(key)
             }
         },
-        [gameFinished, handleAddGuess, handleDelete, handleAddLetter]
+        [handleAddGuess, handleDelete, handleAddLetter]
     )
 
     const contextState: AppState = useMemo(
