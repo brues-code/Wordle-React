@@ -3,7 +3,7 @@ import useEventListener from '@use-it/event-listener'
 
 import { QWERTY_LAYOUT } from 'app/app-constants'
 import { validateKeys } from 'utils'
-import { KeyCode } from 'enums'
+import { SpecialKeys } from 'enums'
 
 import { useApp } from 'app/context/AppContext'
 import KeyboardKey from './KeyboardKey'
@@ -18,7 +18,7 @@ const Keyboard = () => {
     useEventListener('keydown', ({ key }: KeyboardEvent) => handleKeyCode(key))
 
     const renderKey = useCallback(
-        (key: string | KeyCode) => (
+        (key: string) => (
             <KeyboardKey
                 key={key}
                 keyValue={key}
@@ -42,7 +42,7 @@ const Keyboard = () => {
                         : row.map((keys, index) => {
                               if (!keys) {
                                   return <KeyBoardSpacer key={index} />
-                              } else if (KeyCode[keys]) {
+                              } else if (SpecialKeys[keys]) {
                                   return renderKey(keys)
                               } else {
                                   return renderLetters(keys)

@@ -10,7 +10,7 @@ import React, {
 import { some } from 'lodash'
 import { useCookies } from 'react-cookie'
 import { Cookie } from 'universal-cookie'
-import { Cookies, KeyCode, Locales } from 'enums'
+import { Cookies, SpecialKeys, Locales } from 'enums'
 
 import {
     WORD_SIZE,
@@ -100,9 +100,9 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const handleKeyCode = useCallback(
         (key: string) => {
-            if (key === KeyCode.Backspace) {
+            if (key === SpecialKeys.Backspace) {
                 handleDelete()
-            } else if (key == KeyCode.Enter) {
+            } else if (key == SpecialKeys.Enter) {
                 handleAddGuess()
             } else if (isLetter(key)) {
                 handleAddLetter(key)

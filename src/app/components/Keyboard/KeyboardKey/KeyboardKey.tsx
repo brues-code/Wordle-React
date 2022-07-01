@@ -1,14 +1,14 @@
 import React, { FC, useMemo } from 'react'
 
 import { useApp } from 'app/context/AppContext'
-import { GuessType, KeyCode } from 'enums'
+import { GuessType, SpecialKeys } from 'enums'
 
 import Icon from 'app/components/Icon'
 
 import { KeyContainer } from './styles'
 
 interface OwnProps {
-    keyValue: string | KeyCode
+    keyValue: string
     validStatus?: GuessType
 }
 
@@ -18,7 +18,7 @@ const KeyboardKey: FC<OwnProps> = ({ keyValue, validStatus }) => {
     const handleKeyClick = () => handleKeyCode(keyValue)
 
     const renderKeyValue = useMemo(() => {
-        if (keyValue === KeyCode.Backspace) {
+        if (keyValue === SpecialKeys.Backspace) {
             return <Icon name="icon_backspace" />
         }
         return keyValue

@@ -7,7 +7,7 @@ export enum Locales {
     en = 'en',
 }
 
-export enum KeyCode {
+export enum SpecialKeys {
     Backspace = 'Backspace',
     Enter = 'Enter',
 }

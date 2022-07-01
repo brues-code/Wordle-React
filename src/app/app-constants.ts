@@ -1,4 +1,4 @@
-import { KeyCode, Locales } from 'enums'
+import { SpecialKeys, Locales } from 'enums'
 import { GetWordOfTheDay, getMidnightStamp } from 'utils'
 
 export const SEED_DATE = new Date(2022, 0, 1, 0, 0, 0, 0)
@@ -12,7 +12,7 @@ export const TOTAL_CHANCES = 6
 export const QWERTY_LAYOUT = [
     'qwertyuiop',
     [null, 'asdfghjkl', null],
-    [KeyCode.Enter, 'zxcvbnm', KeyCode.Backspace],
+    [SpecialKeys.Enter, 'zxcvbnm', SpecialKeys.Backspace],
 ]
 
 export const DEFAULT_LOCALE = Locales.en
