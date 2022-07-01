@@ -1,7 +1,8 @@
-import React, { useCallback, useMemo, FC } from 'react'
+import React, { useCallback, useMemo } from 'react'
+import useEventListener from '@use-it/event-listener'
 
 import { QWERTY_LAYOUT } from 'app/app-constants'
-import { validateKeys } from 'utils/word-validation'
+import { validateKeys } from 'utils'
 import { KeyCode } from 'enums'
 
 import { useApp } from 'app/context/AppContext'
@@ -9,10 +10,12 @@ import KeyboardKey from './KeyboardKey'
 
 import { KeyboardContainer, KeyboardRow, KeyBoardSpacer } from './styles'
 
-const Keyboard: FC = () => {
-    const { guesses } = useApp()
+const Keyboard = () => {
+    const { guesses, handleKeyCode } = useApp()
 
     const validatedKeys = useMemo(() => validateKeys(guesses), [guesses])
+
+    useEventListener('keydown', ({ key }: KeyboardEvent) => handleKeyCode(key))
 
     const renderKey = useCallback(
         (key: string | KeyCode) => (
@@ -39,10 +42,10 @@ const Keyboard: FC = () => {
                         : row.map((keys, index) => {
                               if (!keys) {
                                   return <KeyBoardSpacer key={index} />
-                              } else if (typeof keys === 'string') {
-                                  return renderLetters(keys)
-                              } else {
+                              } else if (KeyCode[keys]) {
                                   return renderKey(keys)
+                              } else {
+                                  return renderLetters(keys)
                               }
                           })}
                 </KeyboardRow>

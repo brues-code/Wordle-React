@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, FC } from 'react'
+import React, { FC, useCallback, useMemo } from 'react'
 
 import { useApp } from 'app/context/AppContext'
 import { GuessType, KeyCode } from 'enums'
@@ -12,30 +12,23 @@ interface OwnProps {
     validStatus?: GuessType
 }
 
-const specialKeyRender = (keyValue: KeyCode) => {
-    if (keyValue === KeyCode.Enter) {
-        return 'enter'
-    }
-    return <Icon name="icon_backspace" />
-}
-
 const KeyboardKey: FC<OwnProps> = ({ keyValue, validStatus }) => {
     const { handleKeyCode } = useApp()
 
     const renderKeyValue = useMemo(() => {
-        if (typeof keyValue === 'string') {
-            return keyValue
+        if (keyValue === KeyCode.Enter) {
+            return 'enter'
         }
-        return specialKeyRender(keyValue)
+        if (keyValue === KeyCode.Backspace) {
+            return <Icon name="icon_backspace" />
+        }
+        return keyValue
     }, [keyValue])
 
-    const handleKeyClick = useCallback(() => {
-        handleKeyCode(
-            typeof keyValue === 'string'
-                ? keyValue.charCodeAt(0) - 32
-                : keyValue
-        )
-    }, [handleKeyCode, keyValue])
+    const handleKeyClick = useCallback(
+        () => handleKeyCode(keyValue),
+        [handleKeyCode, keyValue]
+    )
 
     return (
         <KeyContainer onClick={handleKeyClick} validStatus={validStatus}>

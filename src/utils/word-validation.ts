@@ -1,5 +1,6 @@
-import { WORD_OF_THE_DAY } from './todays_word'
 import { GuessType } from 'enums'
+import { WORD_SIZE, WORD_OF_THE_DAY } from 'app/app-constants'
+import { isValidWord } from 'utils'
 
 export function validateLetter(guessLetter: string, index: number) {
     if (WORD_OF_THE_DAY[index] === guessLetter) {
@@ -26,3 +27,12 @@ export function validateKeys(guesses: string[]) {
     })
     return keyInfo
 }
+
+export const currentGuessIsValidWord = (
+    guesses: string[],
+    currentGuess: string
+) =>
+    WORD_OF_THE_DAY === currentGuess ||
+    (currentGuess.length === WORD_SIZE &&
+        !guesses.includes(currentGuess) &&
+        isValidWord(currentGuess))

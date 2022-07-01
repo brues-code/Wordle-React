@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react'
 import { times } from 'lodash'
 
+import { WORD_SIZE } from 'app/app-constants'
+import { isValidWord } from 'utils'
+
 import LetterBox from 'app/components/LetterBox'
 
 import { RowGrid } from './styles'
-import { WORD_SIZE } from 'app/app-constants'
-import isValidWord from 'utils/valid-word'
 
 interface OwnProps {
     guess: string

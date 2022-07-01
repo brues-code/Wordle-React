@@ -2,7 +2,7 @@ import React, { FC, useMemo } from 'react'
 
 import { LetterBorder } from './styles'
 
-import { validateLetter } from 'utils/word-validation'
+import { validateLetter } from 'utils'
 
 type OwnProps = {
     index: number

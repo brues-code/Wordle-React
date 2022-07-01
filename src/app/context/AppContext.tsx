@@ -4,7 +4,6 @@ import React, {
     PropsWithChildren,
     useCallback,
     useContext,
-    useEffect,
     useMemo,
     useState,
 } from 'react'
@@ -13,10 +12,8 @@ import { useCookies } from 'react-cookie'
 import { Cookie } from 'universal-cookie'
 import { Cookies, KeyCode, Locales } from 'enums'
 
-import { WORD_SIZE, DEFAULT_LOCALE } from 'app/app-constants'
-import { WORD_OF_THE_DAY } from 'utils/todays_word'
-import checkIsValidWord from 'utils/valid-word'
-import getMidnightStamp from 'utils/get-midnight-stamp'
+import { WORD_SIZE, DEFAULT_LOCALE, WORD_OF_THE_DAY } from 'app/app-constants'
+import { getMidnightStamp, isLetter, currentGuessIsValidWord } from 'utils'
 
 interface State {
     solutionFound: boolean
@@ -26,7 +23,7 @@ interface State {
 }
 
 interface ApiProps {
-    handleKeyCode: (keyCode: KeyCode) => void
+    handleKeyCode: (keyCode: string) => void
 }
 
 type AppState = State & ApiProps
@@ -63,15 +60,6 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
         [guesses]
     )
 
-    const currentGuessIsValidWord = useCallback(
-        () =>
-            WORD_OF_THE_DAY === currentGuess ||
-            (currentGuess.length === WORD_SIZE &&
-                !guesses.includes(currentGuess) &&
-                checkIsValidWord(currentGuess)),
-        [currentGuess, guesses]
-    )
-
     const handleDelete = useCallback(
         () =>
             setCurrentGuess((prevState) =>
@@ -83,14 +71,16 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const handleAddLetter = useCallback(
         (letter: string) => {
             if (currentGuess.length < WORD_SIZE) {
-                setCurrentGuess((prevState) => prevState.concat(letter))
+                setCurrentGuess((prevState) =>
+                    prevState.concat(letter.toLowerCase())
+                )
             }
         },
         [currentGuess]
     )
 
     const handleAddGuess = useCallback(() => {
-        if (currentGuessIsValidWord()) {
+        if (currentGuessIsValidWord(guesses, currentGuess)) {
             setGuesses((prevState) => {
                 const newGuesses = prevState.concat(currentGuess)
                 handleSetCookie(Cookies.GUESSES, newGuesses)
@@ -98,40 +88,23 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
             })
             setCurrentGuess('')
         }
-    }, [currentGuessIsValidWord, currentGuess, handleSetCookie])
+    }, [currentGuess, handleSetCookie, guesses])
 
     const handleKeyCode = useCallback(
-        (charCode: KeyCode) => {
+        (key: string) => {
             if (solutionFound) {
                 return
             }
-            if (charCode === KeyCode.Backspace) {
+            if (key === KeyCode.Backspace) {
                 handleDelete()
-            } else if (charCode == KeyCode.Enter) {
+            } else if (key == KeyCode.Enter) {
                 handleAddGuess()
-            } else if (charCode >= KeyCode.KeyA && charCode <= KeyCode.KeyZ) {
-                handleAddLetter(String.fromCharCode(charCode).toLowerCase())
+            } else if (isLetter(key)) {
+                handleAddLetter(key)
             }
         },
         [solutionFound, handleAddGuess, handleDelete, handleAddLetter]
     )
-
-    const handleUserKeyPress = useCallback(
-        (event: Event) => {
-            if (solutionFound) {
-                window.removeEventListener('keydown', handleUserKeyPress)
-                return
-            }
-            handleKeyCode(event['keyCode'] as KeyCode)
-        },
-        [handleKeyCode, solutionFound]
-    )
-    useEffect(() => {
-        if (!solutionFound) {
-            window.addEventListener('keydown', handleUserKeyPress)
-        }
-        return () => window.removeEventListener('keydown', handleUserKeyPress)
-    }, [handleUserKeyPress, solutionFound])
 
     const contextState: AppState = useMemo(
         () => ({

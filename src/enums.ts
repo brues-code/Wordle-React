@@ -8,10 +8,8 @@ export enum Locales {
 }
 
 export enum KeyCode {
-    Backspace = 8,
-    Enter = 13,
-    KeyA = 65,
-    KeyZ = 90,
+    Backspace = 'Backspace',
+    Enter = 'Enter',
 }
 
 export enum GuessType {

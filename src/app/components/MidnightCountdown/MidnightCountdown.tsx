@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import Countdown, { CountdownRendererFn } from 'react-countdown'
 import { useIntl } from 'react-intl'
 
-import getMidnightStamp from 'utils/get-midnight-stamp'
+import { getMidnightStamp } from 'utils'
 
 import { CountdownContainer } from './styles'
 
