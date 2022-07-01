@@ -1,19 +1,14 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import Countdown, { CountdownRendererFn } from 'react-countdown'
 import { useIntl } from 'react-intl'
 
-import { getMidnightStamp } from 'utils'
+import { MIDNIGHT_STAMP } from 'app/app-constants'
+import { formatNumberToTime } from 'utils'
 
 import { CountdownContainer } from './styles'
 
 const MidnightCountdown = () => {
     const { formatMessage } = useIntl()
-    const midnightStamp = useMemo(getMidnightStamp, [])
-
-    const formatTime = useCallback(
-        (time: number) => (time > 9 ? time : `0${time}`),
-        []
-    )
 
     const renderer: CountdownRendererFn = useCallback(
         ({ hours, minutes, seconds, completed }) => (
@@ -23,19 +18,19 @@ const MidnightCountdown = () => {
                     : formatMessage(
                           { id: 'countdown.remainingTime' },
                           {
-                              hours: formatTime(hours),
-                              minutes: formatTime(minutes),
-                              seconds: formatTime(seconds),
+                              hours: formatNumberToTime(hours),
+                              minutes: formatNumberToTime(minutes),
+                              seconds: formatNumberToTime(seconds),
                           }
                       )}
             </span>
         ),
-        [formatTime, formatMessage]
+        [formatMessage]
     )
 
     return (
         <CountdownContainer>
-            <Countdown date={midnightStamp} renderer={renderer} />
+            <Countdown date={MIDNIGHT_STAMP} renderer={renderer} />
         </CountdownContainer>
     )
 }

@@ -1,7 +1,8 @@
 import { KeyCode, Locales } from 'enums'
-import { GetWordOfTheDay } from 'utils'
+import { GetWordOfTheDay, getMidnightStamp } from 'utils'
 
 export const SEED_DATE = new Date(2022, 0, 1, 0, 0, 0, 0)
+export const MIDNIGHT_STAMP = getMidnightStamp()
 
 export const WORD_OF_THE_DAY = GetWordOfTheDay(new Date())
 

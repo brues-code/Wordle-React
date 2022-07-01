@@ -1,3 +1,4 @@
+export * from './format-number-to-time'
 export * from './get-midnight-stamp'
 export * from './is-letter'
 export * from './todays_word'

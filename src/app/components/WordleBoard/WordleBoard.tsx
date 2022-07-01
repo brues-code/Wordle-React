@@ -9,7 +9,7 @@ import MidnightCountdown from 'app/components/MidnightCountdown'
 
 import { BoardContainer, BoardContent, BoardWrapper } from './styles'
 
-const WordleBoard: React.FC = () => {
+const WordleBoard = () => {
     const { guesses, currentGuess, gameFinished } = useApp()
 
     const renderExistingGuesses = useMemo(

@@ -17,8 +17,9 @@ import {
     DEFAULT_LOCALE,
     WORD_OF_THE_DAY,
     TOTAL_CHANCES,
+    MIDNIGHT_STAMP,
 } from 'app/app-constants'
-import { getMidnightStamp, isLetter, currentGuessIsValidWord } from 'utils'
+import { isLetter, currentGuessIsValidWord } from 'utils'
 
 interface State {
     gameFinished: boolean
@@ -55,7 +56,7 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const handleSetCookie = useCallback(
         (cookie: Cookies, value: Cookie) => {
-            setCookie(cookie, value, { expires: getMidnightStamp() })
+            setCookie(cookie, value, { expires: MIDNIGHT_STAMP })
         },
         [setCookie]
     )
