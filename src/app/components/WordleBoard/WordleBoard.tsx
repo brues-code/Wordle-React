@@ -10,7 +10,7 @@ import MidnightCountdown from 'app/components/MidnightCountdown'
 import { BoardContainer, BoardContent, BoardWrapper } from './styles'
 
 const WordleBoard: React.FC = () => {
-    const { guesses, currentGuess, solutionFound } = useApp()
+    const { guesses, currentGuess, gameFinished } = useApp()
 
     const renderExistingGuesses = useMemo(
         () =>
@@ -21,8 +21,11 @@ const WordleBoard: React.FC = () => {
     )
 
     const renderCurrentGuess = useMemo(
-        () => <LetterRow key={guesses.length + 1} guess={currentGuess} />,
-        [currentGuess, guesses.length]
+        () =>
+            !gameFinished && (
+                <LetterRow key={guesses.length + 1} guess={currentGuess} />
+            ),
+        [currentGuess, guesses.length, gameFinished]
     )
 
     const renderEmptyGuesses = useMemo(
@@ -37,8 +40,8 @@ const WordleBoard: React.FC = () => {
     )
 
     const renderMidnightCountdown = useMemo(
-        () => solutionFound && <MidnightCountdown />,
-        [solutionFound]
+        () => gameFinished && <MidnightCountdown />,
+        [gameFinished]
     )
 
     return (

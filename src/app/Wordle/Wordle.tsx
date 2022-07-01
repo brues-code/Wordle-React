@@ -7,11 +7,11 @@ import WordleBoard from 'app/components/WordleBoard'
 import Keyboard from 'app/components/Keyboard'
 
 const Wordle = () => {
-    const { solutionFound } = useApp()
+    const { gameFinished } = useApp()
 
     const renderKeyBoard = useMemo(
-        () => !solutionFound && <Keyboard />,
-        [solutionFound]
+        () => !gameFinished && <Keyboard />,
+        [gameFinished]
     )
 
     return (

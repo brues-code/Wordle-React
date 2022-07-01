@@ -12,11 +12,16 @@ import { useCookies } from 'react-cookie'
 import { Cookie } from 'universal-cookie'
 import { Cookies, KeyCode, Locales } from 'enums'
 
-import { WORD_SIZE, DEFAULT_LOCALE, WORD_OF_THE_DAY } from 'app/app-constants'
+import {
+    WORD_SIZE,
+    DEFAULT_LOCALE,
+    WORD_OF_THE_DAY,
+    TOTAL_CHANCES,
+} from 'app/app-constants'
 import { getMidnightStamp, isLetter, currentGuessIsValidWord } from 'utils'
 
 interface State {
-    solutionFound: boolean
+    gameFinished: boolean
     guesses: string[]
     currentGuess: string
     currentLocale: Locales
@@ -29,7 +34,7 @@ interface ApiProps {
 type AppState = State & ApiProps
 
 const initialState: AppState = {
-    solutionFound: false,
+    gameFinished: false,
     guesses: [],
     currentGuess: '',
     handleKeyCode: () => null,
@@ -55,8 +60,10 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
         [setCookie]
     )
 
-    const solutionFound = useMemo(
-        () => some(guesses, (guess) => guess === WORD_OF_THE_DAY),
+    const gameFinished = useMemo(
+        () =>
+            guesses.length === TOTAL_CHANCES ||
+            some(guesses, (guess) => guess === WORD_OF_THE_DAY),
         [guesses]
     )
 
@@ -92,7 +99,7 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const handleKeyCode = useCallback(
         (key: string) => {
-            if (solutionFound) {
+            if (gameFinished) {
                 return
             }
             if (key === KeyCode.Backspace) {
@@ -103,7 +110,7 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
                 handleAddLetter(key)
             }
         },
-        [solutionFound, handleAddGuess, handleDelete, handleAddLetter]
+        [gameFinished, handleAddGuess, handleDelete, handleAddLetter]
     )
 
     const contextState: AppState = useMemo(
@@ -112,9 +119,9 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
             currentLocale,
             guesses,
             handleKeyCode,
-            solutionFound,
+            gameFinished,
         }),
-        [guesses, currentGuess, solutionFound, handleKeyCode, currentLocale]
+        [guesses, currentGuess, gameFinished, handleKeyCode, currentLocale]
     )
 
     return (
