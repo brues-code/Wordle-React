@@ -21,22 +21,17 @@ const WordleBoard: React.FC = () => {
     )
 
     const renderCurrentGuess = useMemo(
-        () =>
-            !gameFinished && (
-                <LetterRow key={guesses.length + 1} guess={currentGuess} />
-            ),
-        [currentGuess, guesses.length, gameFinished]
+        () => !gameFinished && <LetterRow key="current" guess={currentGuess} />,
+        [currentGuess, gameFinished]
     )
 
     const renderEmptyGuesses = useMemo(
         () =>
             times(
-                Math.max(0, TOTAL_CHANCES - (guesses.length + 1)),
-                (rowIndex) => (
-                    <LetterRow key={guesses.length + 2 + rowIndex} guess={''} />
-                )
+                TOTAL_CHANCES - (guesses.length + (gameFinished ? 0 : 1)),
+                (rowIndex) => <LetterRow key={'empty' + rowIndex} />
             ),
-        [guesses.length]
+        [guesses.length, gameFinished]
     )
 
     const renderMidnightCountdown = useMemo(
