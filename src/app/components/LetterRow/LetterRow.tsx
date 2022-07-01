@@ -9,11 +9,11 @@ import LetterBox from 'app/components/LetterBox'
 import { RowGrid } from './styles'
 
 interface OwnProps {
-    guess: string
+    guess?: string
     complete?: boolean
 }
 
-const LetterRow: React.FC<OwnProps> = ({ guess, complete }) => {
+const LetterRow: React.FC<OwnProps> = ({ guess = '', complete }) => {
     const rowIsComplete = useMemo(
         () => guess.length === WORD_SIZE && complete && isValidWord(guess),
         [guess, complete]
