@@ -8,7 +8,9 @@ import React, {
     useState,
 } from 'react'
 import { some } from 'lodash'
+
 import { LocalStorage, SpecialKeys, Locales } from 'enums'
+import { Guesses } from 'types/guesses'
 
 import {
     WORD_SIZE,
@@ -25,7 +27,7 @@ import {
 
 interface State {
     gameFinished: boolean
-    guesses: string[]
+    guesses: Guesses
     currentGuess: string
     currentLocale: Locales
 }
@@ -47,7 +49,7 @@ const initialState: AppState = {
 export const AppContext = createContext(initialState)
 
 const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
-    const [guesses, setGuesses] = useState<string[]>(getStorageGuesses())
+    const [guesses, setGuesses] = useState<Guesses>(getStorageGuesses())
     const [currentLocale] = useState(
         (localStorage.getItem(LocalStorage.LOCALE) as Locales) ||
             initialState.currentLocale
