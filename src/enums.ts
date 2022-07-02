@@ -1,5 +1,5 @@
-export enum Cookies {
-    GUESSES = 'guesses',
+export enum LocalStorage {
+    GAME_STATE = 'gamestate',
     LOCALE = 'locale',
 }
 

@@ -8,18 +8,20 @@ import React, {
     useState,
 } from 'react'
 import { some } from 'lodash'
-import { useCookies } from 'react-cookie'
-import { Cookie } from 'universal-cookie'
-import { Cookies, SpecialKeys, Locales } from 'enums'
+import { LocalStorage, SpecialKeys, Locales } from 'enums'
 
 import {
     WORD_SIZE,
     DEFAULT_LOCALE,
     WORD_OF_THE_DAY,
     TOTAL_CHANCES,
-    MIDNIGHT_STAMP,
 } from 'app/app-constants'
-import { isLetter, currentGuessIsValidWord } from 'utils'
+import {
+    isLetter,
+    currentGuessIsValidWord,
+    getStorageGuesses,
+    setStorageGuesses,
+} from 'utils'
 
 interface State {
     gameFinished: boolean
@@ -45,21 +47,12 @@ const initialState: AppState = {
 export const AppContext = createContext(initialState)
 
 const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
-    const [cookies, setCookie] = useCookies()
-    const [guesses, setGuesses] = useState<string[]>(
-        cookies[Cookies.GUESSES] || initialState.guesses
-    )
+    const [guesses, setGuesses] = useState<string[]>(getStorageGuesses())
     const [currentLocale] = useState(
-        cookies[Cookies.LOCALE] || initialState.currentLocale
+        (localStorage.getItem(LocalStorage.LOCALE) as Locales) ||
+            initialState.currentLocale
     )
     const [currentGuess, setCurrentGuess] = useState('')
-
-    const handleSetCookie = useCallback(
-        (cookie: Cookies, value: Cookie) => {
-            setCookie(cookie, value, { expires: MIDNIGHT_STAMP })
-        },
-        [setCookie]
-    )
 
     const gameFinished = useMemo(
         () =>
@@ -91,12 +84,12 @@ const AppContextProvider: FC<PropsWithChildren> = ({ children }) => {
         if (currentGuessIsValidWord(guesses, currentGuess)) {
             setGuesses((prevState) => {
                 const newGuesses = prevState.concat(currentGuess)
-                handleSetCookie(Cookies.GUESSES, newGuesses)
+                setStorageGuesses(newGuesses)
                 return newGuesses
             })
             setCurrentGuess('')
         }
-    }, [currentGuess, handleSetCookie, guesses])
+    }, [currentGuess, guesses])
 
     const handleKeyCode = useCallback(
         (key: string) => {
